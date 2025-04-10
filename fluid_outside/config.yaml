@@ -1,0 +1,50 @@
+simulation:
+  case:
+    workspace:
+      constants:
+        - L: 0.2
+        - L_obj: 0.025
+        - csize: 0.005
+        - dx: csize/2.5
+        - h: csize/2
+        - g: 0|-9.81        # gravitational acceleration
+        - rho0: 1000
+        - mass: dx^2*rho0
+        - c: 20
+        - R: 2*h
+      variables:
+        - dt: 0.0001
+      particle_system:
+        domain:
+          cell_size: csize|csize 
+          minimum: 0|0
+          maximum: 40|60
+          boundary: symmetric|symmetric # solid walls
+        grid:               
+          gid: 0
+          gpos: 0|0 
+          gsize: L|L   
+          goffset: 0|0  
+          gip_dist: dx|dx 
+        grid:            
+          gid: 1
+          gpos: 0.5*L - L_obj/2|1.25*L - L_obj/2
+          gsize: L_obj|L_obj
+          goffset: 0|0 
+          gip_dist: dx|dx
+      fields:
+        - a: 0|0
+        - v: 0|0
+        - rho: rho0
+        - rho_dot: 0
+        - p: 0
+    equations:
+      - conti: rho_dot=-rho*sph_D00(v,mass,rho,Wp52220,R)+0.1*c*h*sph_L0(rho,mass,rho,Wp52220,R)
+      - int_rho: rho=euler(rho,rho_dot,dt)
+      - EOS: p=c^2*(rho-rho0)
+      - EOM: a=-1/rho*sph_G11(p,mass,rho,Wp52220,R)+0.01*sph_A(v,mass,rho,Wp52220,R)+g
+      - vel: v=euler(v,a,dt)
+      - pos: r=euler(r,v,dt)
+  parameter_space:
+    simulated_time: 0.2
+    print_interval: 0.01
