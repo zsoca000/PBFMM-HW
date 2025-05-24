@@ -35,8 +35,8 @@ conti:rho_dot=((-(rho*sph_D00(v,mass,rho,Wp52220,R)))+(((0.1*c)*h)*sph_L0(rho,ma
 int_rho:rho=euler(rho,rho_dot,dt)#true
 EOS:p=((c^2)*(rho-rho0))#true
 EOM:a=(((-((1/rho)*sph_G11(p,mass,rho,Wp52220,R)))+(0.01*sph_A(v,mass,rho,Wp52220,R)))+g)#true
-vel:v=euler(v,a,dt)#true
-pos:r=euler(r,v,dt)#true
+vel:v=euler(v,a,dt)#eq(gid,1)
+pos:r=euler(r,v,dt)#eq(gid,1)
 force:f=(mass*a)#eq(gid,0)
 
 POINTS 10144 float

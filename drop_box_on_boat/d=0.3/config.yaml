@@ -2,19 +2,19 @@ simulation:
   case:
     workspace:
       constants:
-        # Water params
         - L: 0.2
-        - t: 0.0025 # wall thickness
-        - W: 0.05 # boat wwidth
-        - H: 0.025 # boat height
+        - d: 0.4 # Height of the object
         - x_c: 0.5*L # center x coo of boat
         - y_c: 1.25*L # center y coo of boat
         - rho_solid: 2000
+        - t: 0.0075 # wall thickness
+        - W: 0.075 # boat wwidth
+        - H: 0.025 # boat height
         - L_obj: 0.025
         - csize: 0.005
         - dx: csize/2.5
         - h: csize/2
-        - g: 0|-9.81|0        # gravitational acceleration
+        - g: 0|-9.81|0
         - rho0: 1000
         - mass: dx^2*rho0
         - mass_solid: dx^2*rho_solid
@@ -26,27 +26,33 @@ simulation:
         domain:
           cell_size: csize|csize|csize
           minimum: 0|0|-1
-          maximum: 40|60|1
+          maximum: 40|100|1
           boundary: symmetric|symmetric|cutoff # solid walls
-        grid:            
+        grid:  # box        
           gid: 0
-          gpos: x_c - W/2 | y_c - H/2|-dx/2
+          gpos: x_c - L_obj/2 | d - L_obj/2|-dx/2
+          gsize: L_obj|L_obj|dx
+          goffset: 0|0|0
+          gip_dist: dx|dx|dx
+        grid:  # Left wall     
+          gid: 0
+          gpos: x_c - W/2 | L |-dx/2
           gsize: t|H|dx
           goffset: 0|0|0
           gip_dist: dx|dx|dx
-        grid:            
+        grid: # Bottom        
           gid: 0
-          gpos: x_c - W/2+t | y_c - H/2|-dx/2
+          gpos: x_c - W/2+t | L|-dx/2
           gsize: W-2*t | t | dx
           goffset: 0|0|0
           gip_dist: dx|dx|dx
-        grid:            
+        grid: # Right wall        
           gid: 0
-          gpos: x_c + W/2 - t | y_c - H/2|-dx/2
+          gpos: x_c + W/2 - t | L |-dx/2
           gsize: t|H|dx
           goffset: 0|0|0
           gip_dist: dx|dx|dx
-        grid:               
+        grid: # Water         
           gid: 1
           gpos: 0|0|-dx/2 
           gsize: L|L|dx   
@@ -65,14 +71,16 @@ simulation:
       - EOS: p=c^2*(rho-rho0)
       - EOM: a=-1/rho*sph_G11(p,mass,rho,Wp52220,R)+0.01*sph_A(v,mass,rho,Wp52220,R)+g
       - vel: v=euler(v,a,dt)
+        condition: eq(gid,1)
       - pos: r=euler(r,v,dt)
+        condition: eq(gid,1)
       - force: f=mass*a # nem így?
         condition: eq(gid,0)
   parameter_space:
     simulated_time: 0.5
     print_interval: 0.01
   rigid_body_system:
-    file: boat_0.0025.txt # just new row for other object
+    file: boat.txt # just new row for other object
     velocity: v
     force: f
     mass: mass_solid # dx^2 * rho_solid

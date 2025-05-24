@@ -47,7 +47,9 @@ simulation:
       - EOS: p=c^2*(rho-rho0)
       - EOM: a=-1/rho*sph_G11(p,mass,rho,Wp52220,R)+0.01*sph_A(v,mass,rho,Wp52220,R)+g
       - vel: v=euler(v,a,dt)
+        condition: eq(gid,1)
       - pos: r=euler(r,v,dt)
+        condition: eq(gid,1)
       - force: f=mass*a # nem így?
         condition: eq(gid,0)
   parameter_space:
