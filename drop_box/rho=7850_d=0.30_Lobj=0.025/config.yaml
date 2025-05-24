@@ -21,7 +21,7 @@ simulation:
         domain:
           cell_size: csize|csize|csize
           minimum: 0|0|-1
-          maximum: 40|60|1
+          maximum: 40|100|1
           boundary: symmetric|symmetric|cutoff # solid walls
         grid:            
           gid: 0

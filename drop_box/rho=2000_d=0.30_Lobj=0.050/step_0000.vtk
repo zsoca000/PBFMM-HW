@@ -5,7 +5,7 @@ DATASET POLYDATA
 FIELD FieldData 4
 domain 1 4 string
 domain_min:0|0|-1
-domain_max:40|60|1
+domain_max:40|100|1
 cell_size:0.005|0.005|0.005
 boundary:1|1|2
 
