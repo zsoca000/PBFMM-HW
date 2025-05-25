@@ -3,7 +3,7 @@ simulation:
     workspace:
       constants:
         - L: 0.2
-        - d: 0.3 # Height of the object
+        - d: 0.4 # Height of the object
         - x_c: 0.5*L # center x coo of boat
         - y_c: 1.25*L # center y coo of boat
         - rho_solid: 2000
